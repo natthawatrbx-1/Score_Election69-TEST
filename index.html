@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>รายงานผลคะแนนเลือกตั้ง</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #e9ecef; }
+        .hidden { display: none !important; }
+        
+        /* การ์ดผู้สมัคร */
+        .candidate-card {
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .candidate-card.active { border-color: #0d6efd; background-color: #f8f9fa; }
+        .candidate-img {
+            width: 100px; height: 100px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            margin-bottom: 10px;
+            border: 3px solid #ddd;
+        }
+        
+        /* ช่องกรอกคะแนนให้ใหญ่ กดง่ายในมือถือ */
+        .score-input {
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        .header-bg { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 20px 0; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <div id="loginPage" class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4 text-center">
+                        <h3 class="fw-bold text-primary mb-3">เข้าสู่ระบบรายงานผล</h3>
+                        <p class="text-muted small">สำหรับเจ้าหน้าที่ประจำหน่วยเลือกตั้ง</p>
+                        
+                        <form id="loginForm">
+                            <div class="mb-3 text-start">
+                                <label class="form-label">ชื่อหน่วย (User ID)</label>
+                                <input type="text" id="loginUnit" class="form-control form-control-lg" placeholder="เช่น Unit01" required>
+                            </div>
+                            <div class="mb-3 text-start">
+                                <label class="form-label">รหัสผ่าน</label>
+                                <input type="password" id="loginPass" class="form-control form-control-lg" placeholder="****" required>
+                            </div>
+                            <button type="submit" id="btnLogin" class="btn btn-primary w-100 btn-lg rounded-pill shadow-sm">เข้าสู่ระบบ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scorePage" class="hidden">
+        
+        <div class="header-bg text-center mb-4">
+            <h4 class="m-0 fw-bold">อำเภอ A</h4>
+            <p class="m-0 mt-1" id="displayUnitName">หน่วยที่...</p>
+            <button class="btn btn-sm btn-outline-light mt-2 rounded-pill" onclick="logout()">ออกจากระบบ</button>
+        </div>
+
+        <div class="container mb-5" style="max-width: 600px;">
+            <form id="scoreForm">
+                
+                <div class="card border-0 shadow-sm mb-4 rounded-4">
+                    <div class="card-body">
+                        <label class="form-label fw-bold"><i class="far fa-clock"></i> รอบเวลาส่งคะแนน (ทุก 15 นาที)</label>
+                        <select class="form-select form-select-lg text-center fw-bold text-primary" id="timeRound" required>
+                            <option value="" selected disabled>-- กรุณาเลือกรอบเวลา --</option>
+                            </select>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-4">
+                        <div class="card candidate-card h-100 py-3 shadow-sm rounded-4">
+                            <img src="https://via.placeholder.com/150/0d6efd/FFFFFF?text=No.1" class="candidate-img mx-auto">
+                            <div class="fw-bold">เบอร์ 1</div>
+                            <input type="number" inputmode="numeric" class="form-control score-input mt-2" name="score1" placeholder="0" required>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card candidate-card h-100 py-3 shadow-sm rounded-4">
+                            <img src="https://via.placeholder.com/150/198754/FFFFFF?text=No.2" class="candidate-img mx-auto">
+                            <div class="fw-bold">เบอร์ 2</div>
+                            <input type="number" inputmode="numeric" class="form-control score-input mt-2" name="score2" placeholder="0" required>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card candidate-card h-100 py-3 shadow-sm rounded-4">
+                            <img src="https://via.placeholder.com/150/dc3545/FFFFFF?text=No.3" class="candidate-img mx-auto">
+                            <div class="fw-bold">เบอร์ 3</div>
+                            <input type="number" inputmode="numeric" class="form-control score-input mt-2" name="score3" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="btnSubmit" class="btn btn-success w-100 btn-lg py-3 rounded-pill shadow fw-bold fs-4">
+                    <i class="fas fa-paper-plane me-2"></i> ส่งคะแนน
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- การตั้งค่า ---
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzWEAR0_lLlhcAX04D9oDnNextue0tI81ZlzkSZ1dkfWhoSngwTkupk8PLAFBul9UQ/exec'; // <--- เปลี่ยนตรงนี้ !!!
+        let currentUnit = '';
+
+        // 1. สร้างตัวเลือกเวลา (ทุก 15 นาที) ตั้งแต่ 08:00 - 17:00
+        const timeSelect = document.getElementById('timeRound');
+        const startHour = 8;
+        const endHour = 17;
+        for (let h = startHour; h <= endHour; h++) {
+            for (let m = 0; m < 60; m += 15) {
+                if (h === endHour && m > 0) break; // จบที่ 17:00
+                const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+                const option = document.createElement('option');
+                option.value = timeStr;
+                option.text = `เวลา ${timeStr} น.`;
+                timeSelect.appendChild(option);
+            }
+        }
+
+        // 2. ตรวจสอบ Login หรือ QR Code เมื่อโหลดหน้าเว็บ
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const unitParam = urlParams.get('unit'); // ดูว่ามี ?unit=... ไหม
+
+            if (unitParam) {
+                // ถ้ามาจากการสแกน QR Code ให้ข้าม Login ไปเลย
+                currentUnit = unitParam;
+                showScorePage();
+            } else {
+                // ถ้าไม่มี ให้แสดงหน้า Login ปกติ
+                document.getElementById('loginPage').classList.remove('hidden');
+            }
+        };
+
+        // 3. ฟังก์ชัน Login ปกติ
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const unit = document.getElementById('loginUnit').value;
+            const pass = document.getElementById('loginPass').value;
+            const btn = document.getElementById('btnLogin');
+
+            btn.disabled = true;
+            btn.innerText = 'กำลังตรวจสอบ...';
+
+            try {
+                // ส่งไปเช็คที่ Apps Script
+                const formData = new FormData();
+                formData.append('action', 'login');
+                formData.append('unit', unit);
+                formData.append('pass', pass);
+
+                const response = await fetch(scriptURL, { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    currentUnit = unit;
+                    showScorePage();
+                } else {
+                    Swal.fire('Login ไม่ผ่าน', result.message, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error');
+            }
+            btn.disabled = false;
+            btn.innerText = 'เข้าสู่ระบบ';
+        });
+
+        // 4. แสดงหน้าส่งคะแนน
+        function showScorePage() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('scorePage').classList.remove('hidden');
+            document.getElementById('displayUnitName').innerText = 'หน่วยเลือกตั้ง: ' + currentUnit;
+        }
+
+        // 5. ส่งคะแนน
+        document.getElementById('scoreForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // เช็คว่าเลือกเวลาหรือยัง
+            if(!document.getElementById('timeRound').value){
+                Swal.fire('แจ้งเตือน', 'กรุณาเลือกช่วงเวลาก่อนส่ง', 'warning');
+                return;
+            }
+
+            Swal.fire({
+                title: 'ยืนยันการส่งคะแนน?',
+                text: `คุณกำลังส่งคะแนนของรอบเวลา ${document.getElementById('timeRound').value}`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยัน ส่งเลย!',
+                cancelButtonText: 'ยกเลิก'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    submitData();
+                }
+            });
+        });
+
+        async function submitData() {
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+
+            const form = document.getElementById('scoreForm');
+            const formData = new FormData(form);
+            formData.append('action', 'submitScore');
+            formData.append('unitName', currentUnit); // แนบชื่อหน่วยไปด้วย
+            formData.append('timeRound', document.getElementById('timeRound').value);
+
+            try {
+                const response = await fetch(scriptURL, { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    Swal.fire('สำเร็จ!', 'ส่งคะแนนเรียบร้อยแล้ว', 'success');
+                    form.reset(); // ล้างค่าฟอร์ม
+                    document.getElementById('timeRound').value = ""; // ล้างเวลา
+                } else {
+                    Swal.fire('ผิดพลาด', result.message, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่', 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane me-2"></i> ส่งคะแนน';
+        }
+
+        function logout() {
+            location.href = location.href.split('?')[0]; // รีโหลดหน้าและลบ parameter
+        }
+    </script>
+</body>
+</html>
