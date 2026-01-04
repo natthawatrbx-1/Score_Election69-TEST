@@ -68,7 +68,7 @@
     <div id="scorePage" class="hidden">
         
         <div class="header-bg text-center mb-4">
-            <h4 class="m-0 fw-bold">อำเภอ A</h4>
+            <h4 class="m-0 fw-bold">อำเภอระแงะ</h4>
             <p class="m-0 mt-1" id="displayUnitName">หน่วยที่...</p>
             <button class="btn btn-sm btn-outline-light mt-2 rounded-pill" onclick="logout()">ออกจากระบบ</button>
         </div>
@@ -85,25 +85,25 @@
                     </div>
                 </div>
 
-                <div class="row g-3 mb-4">
+                 <div class="row g-3 mb-4">
                     <div class="col-4">
                         <div class="card candidate-card h-100 py-3 shadow-sm rounded-4">
                             <img src="https://img5.pic.in.th/file/secure-sv1/602375689_1592559311915281_869190899409151957_n.jpg" class="candidate-img mx-auto">
-                            <div class="fw-bold">เบอร์ 1</div>
+                            <div class="fw-bold">เบอร์ 1<br>กูเฮง ยาวอหะซัน</div>
                             <input type="number" inputmode="numeric" class="form-control score-input mt-2" name="score1" placeholder="0" required>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="card candidate-card h-100 py-3 shadow-sm rounded-4">
                             <img src="https://img2.pic.in.th/1810-copy.jpg" class="candidate-img mx-auto">
-                            <div class="fw-bold">เบอร์ 3</div>
+                            <div class="fw-bold">เบอร์ 3<br>อดิศร อาแวเต๊ะ</div>
                             <input type="number" inputmode="numeric" class="form-control score-input mt-2" name="score2" placeholder="0" required>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="card candidate-card h-100 py-3 shadow-sm rounded-4">
-                            <img src="https://img2.pic.in.th/Screenshot-2026-01-04-154050.png" class="candidate-img mx-auto">
-                            <div class="fw-bold">เบอร์ 5</div>
+                            <img src="https://img2.pic.in.th/601834557_847098081387508_3441380168376322986_n.jpg" class="candidate-img mx-auto">
+                            <div class="fw-bold">เบอร์ 5<br>ซาการียา สะอิ</div>
                             <input type="number" inputmode="numeric" class="form-control score-input mt-2" name="score3" placeholder="0" required>
                         </div>
                     </div>
@@ -124,8 +124,8 @@
 
         // 1. สร้างตัวเลือกเวลา (ทุก 15 นาที) ตั้งแต่ 08:00 - 17:00
         const timeSelect = document.getElementById('timeRound');
-        const startHour = 8;
-        const endHour = 17;
+        const startHour = 16;
+        const endHour = 23;
         for (let h = startHour; h <= endHour; h++) {
             for (let m = 0; m < 60; m += 15) {
                 if (h === endHour && m > 0) break; // จบที่ 17:00
@@ -250,7 +250,4 @@
         }
     </script>
 </body>
-
 </html>
-
-
